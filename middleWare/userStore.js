@@ -11,36 +11,24 @@ var user = new mongoose.Schema({
 
 //Store methods
 user.statics.storeUsers = async function (usersArray) {//write users array to db
-    let User = this;
-    let user = {};
-
     try {
-        usersArray.forEach(itm => {
-            user = new User({
-                userName: itm['User Name'],
-                firstName: itm['First Name'],
-                lastName: itm['Last Name'],
-                age: itm.Age,
-            });
-        user.save();
-        });
-        return {err:null,users:User.find({})};
+        let User = this;
+        let user = {};
+        for (const itm of usersArray){
+                user = new User({
+                    userName: itm['User Name'],
+                    firstName: itm['First Name'],
+                    lastName: itm['Last Name'],
+                    age: itm.Age,
+                });
+            await user.save();
+        }
+        return User.find({});
 
     } catch(err) {
-        console.log('userMFCTBC err: ',err);
-        return {err:err,user:null};
+        return err;
     }
 };
-
-
-
-
-
-
-
-
-
-
 
 module.exports.User = mongoose.model('User', user);
 

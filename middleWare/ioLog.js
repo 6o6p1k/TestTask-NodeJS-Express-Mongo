@@ -1,47 +1,29 @@
 /**
  * Created by Mishok on 13.12.2017.
  */
-var fs = require('fs');
+var fs = require('fs').promises;
 
-
-var read = function (fileName,callback) {
-    fs.readFile('./userCSV/'+fileName, {encoding: 'UTF-8'},(err, data) => {
-        if (err) callback(err,null);
-        else {
-            callback(null,data)
-            console.log('module ioLog read successful');
-        }
-    });
+const read = async (fileName) => {
+    console.log('module ioLog read fileName: ', fileName);
+    try{
+        return await fs.readFile('./userCSV/'+fileName, {encoding: 'UTF-8'});
+    } catch(err){
+        return err;
+    }
 };
 
-var append = function (fileName,txt, callback) {
-    fs.appendFile('./userCSV/'+fileName, txt + '\r', (err) => {
-        if (err) callback(err)
-        else console.log('module ioLog append successful');
-    });
-};
-
-var clean = function (fileName,callback) {
-    console.log('module ioLog clean fileName: ', fileName);
-    fs.writeFile('./userCSV/'+fileName, '', (err) => {
-        if (err) callback(err)
-        else console.log('module ioLog clean successful');
-    });
-};
-
-var unlink = function (fileName,callback) {
-    console.log('module ioLog unlink fileName: ', fileName);
-    fs.unlink('./userCSV/'+fileName, (err) => {
-        if (err) callback(err)
-        else console.log('module ioLog unlink successful');
-    });
+const append = async (fileName,txt) => {
+    console.log('module ioLog append fileName: ', fileName);
+    try{
+        return await fs.appendFile('./userCSV/'+fileName, txt + '\r',);
+    } catch(err){
+        return err;
+    }
 };
 
 
 
 module.exports.r = read;
 module.exports.a = append;
-module.exports.c = clean;
-module.exports.u = unlink;
 
 
