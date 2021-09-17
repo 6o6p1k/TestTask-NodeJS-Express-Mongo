@@ -4,6 +4,7 @@ const config = require('./config');
 const app = express();
 const ip = require('ip');
 let readFile = require('./middleWare/ioLog').r;
+let readStream = require('./middleWare/ioLog').rs;
 let writeFile = require('./middleWare/ioLog').a;
 const User = require('./middleWare/userStore').User;
 const csv = require('csvtojson');
@@ -16,7 +17,20 @@ const path = require('path');
 app.get('/', async (req,res)=> {//
     try{
         console.log('/');
-        let data = await readFile('SampleUsers.csv')
+        let data = await readFile('SampleUsers.csv');
+        res.send(data)
+    }catch (err){
+        console.log('read file err', err);
+        res.status(500).send('Something went wrong while reading from file!'+' Err Message: '+err);
+    }
+});
+
+//to read file by stream and send to the web go to page http://localhost:3000/rs
+app.get('/rs', async (req,res)=> {//
+    try{
+        console.log('/rs');
+        let data = await readStream('SampleUsersBigFile.csv');
+        console.log('/rs data', data);
         res.send(data)
     }catch (err){
         console.log('read file err', err);
